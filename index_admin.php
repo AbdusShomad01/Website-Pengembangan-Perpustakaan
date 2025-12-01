@@ -80,7 +80,7 @@ $jml_mhs = mysqli_num_rows($sql_mhs);
 
     <div class="header">
         <h1>SISTEM INFORMASI PERPUSTAKAAN</h1>
-        <p>Universitas Negeri Malang - Proyek Basis Data</p>
+        <p>Universitas Negeri Malang</p>
         
         <a href="logout.php" class="btn-auth">
             Logout ➜

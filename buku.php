@@ -5,7 +5,7 @@ if (!isset($_SESSION['status_login']) || $_SESSION['status_login'] != true) {
     exit;
 }
 include 'koneksi.php';
-
+//hai
 // --- INISIALISASI VARIABEL ---
 $id_edit = "";
 $judul_edit = "";
