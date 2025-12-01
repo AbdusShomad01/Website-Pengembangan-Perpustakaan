@@ -1,25 +1,20 @@
 <?php
-session_start(); // Tetap butuh session untuk cek status, TAPI JANGAN DI-REDIRECT
-include 'koneksi.php';
-
-// Cek apakah user sudah login atau belum?
-$sudah_login = false;
-if (isset($_SESSION['status_login']) && $_SESSION['status_login'] == true) {
-    $sudah_login = true;
-}
+// HAPUS session_start(); DISINI KARENA SUDAH ADA DI index.php
+// include 'koneksi.php'; // Koneksi juga biasanya sudah terbuka, tapi biar aman kita include lagi dengan "include_once"
+include_once 'koneksi.php';
 
 // --- LOGIKA DASHBOARD ---
 $sql_buku = mysqli_query($koneksi, "SELECT * FROM buku");
 $jml_buku = mysqli_num_rows($sql_buku);
 
-$sql_mhs = mysqli_query($koneksi, "SELECT * FROM peminjam");
-$jml_mhs = mysqli_num_rows($sql_mhs);
+$sql_stok = mysqli_query($koneksi, "SELECT * FROM copy_buku WHERE status = 'Tersedia'");
+$jml_stok = mysqli_num_rows($sql_stok);
 
 $sql_pinjam = mysqli_query($koneksi, "SELECT * FROM peminjaman WHERE status_transaksi = 'Berjalan'");
 $jml_pinjam = mysqli_num_rows($sql_pinjam);
 
-$sql_stok = mysqli_query($koneksi, "SELECT * FROM copy_buku WHERE status = 'Tersedia'");
-$jml_stok = mysqli_num_rows($sql_stok);
+$sql_mhs = mysqli_query($koneksi, "SELECT * FROM peminjam");
+$jml_mhs = mysqli_num_rows($sql_mhs);
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +22,7 @@ $jml_stok = mysqli_num_rows($sql_stok);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Perpustakaan UM</title>
+    <title>Dashboard Admin - Perpustakaan UM</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,18 +65,15 @@ $jml_stok = mysqli_num_rows($sql_stok);
         .btn:hover { background: #003366; color: white; transform: translateY(-2px); }
         .group { margin-bottom: 30px; }
 
-        /* Style Tombol Login/Logout di Pojok */
+        /* Style Tombol Logout */
         .btn-auth {
             position: absolute; top: 20px; right: 20px;
             padding: 8px 20px; text-decoration: none; border-radius: 5px;
             font-size: 14px; font-weight: bold; font-family: 'Poppins', sans-serif;
             transition: 0.3s;
+            background: #dc3545; color: white; /* Merah Logout */
         }
-        .btn-login-header { background: #28a745; color: white; } /* Hijau untuk Login */
-        .btn-login-header:hover { background: #218838; }
-        
-        .btn-logout-header { background: #dc3545; color: white; } /* Merah untuk Logout */
-        .btn-logout-header:hover { background: #c82333; }
+        .btn-auth:hover { background: #c82333; }
     </style>
 </head>
 <body>
@@ -90,15 +82,9 @@ $jml_stok = mysqli_num_rows($sql_stok);
         <h1>SISTEM INFORMASI PERPUSTAKAAN</h1>
         <p>Universitas Negeri Malang - Proyek Basis Data</p>
         
-        <?php if ($sudah_login): ?>
-            <a href="logout.php" class="btn-auth btn-logout-header">
-                Logout ➜
-            </a>
-        <?php else: ?>
-            <a href="login.php" class="btn-auth btn-login-header">
-                Login Akun
-            </a>
-        <?php endif; ?>
+        <a href="logout.php" class="btn-auth">
+            Logout ➜
+        </a>
     </div>
 
     <div class="container">
